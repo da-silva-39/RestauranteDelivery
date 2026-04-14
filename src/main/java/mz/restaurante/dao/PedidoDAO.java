@@ -7,16 +7,19 @@ import mz.restaurante.model.Pedido;
 import mz.restaurante.util.ConnectionFactory;
 
 public class PedidoDAO {
-
 	public void inserir(Pedido p) throws SQLException {
 		String sql = "INSERT INTO pedidos (cliente_nome, telefone, endereco, itens, status) VALUES (?,?,?,?,?)";
-		try (Connection conn = ConnectionFactory.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+		try (Connection conn = ConnectionFactory.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			stmt.setString(1, p.getClienteNome());
 			stmt.setString(2, p.getTelefone());
 			stmt.setString(3, p.getEndereco());
 			stmt.setString(4, p.getItens());
 			stmt.setString(5, p.getStatus());
 			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			if (rs.next())
+				p.setId(rs.getInt(1));
 		}
 	}
 
@@ -26,6 +29,27 @@ public class PedidoDAO {
 		try (Connection conn = ConnectionFactory.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql);
 				ResultSet rs = stmt.executeQuery()) {
+			while (rs.next()) {
+				Pedido p = new Pedido();
+				p.setId(rs.getInt("id"));
+				p.setClienteNome(rs.getString("cliente_nome"));
+				p.setTelefone(rs.getString("telefone"));
+				p.setEndereco(rs.getString("endereco"));
+				p.setItens(rs.getString("itens"));
+				p.setStatus(rs.getString("status"));
+				p.setDataPedido(rs.getTimestamp("data_pedido"));
+				lista.add(p);
+			}
+		}
+		return lista;
+	}
+
+	public List<Pedido> listarPorTelefone(String telefone) throws SQLException {
+		List<Pedido> lista = new ArrayList<>();
+		String sql = "SELECT * FROM pedidos WHERE telefone = ? ORDER BY data_pedido DESC";
+		try (Connection conn = ConnectionFactory.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, telefone);
+			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Pedido p = new Pedido();
 				p.setId(rs.getInt("id"));

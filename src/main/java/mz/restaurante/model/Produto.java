@@ -7,6 +7,7 @@ public class Produto {
 	private double preco;
 	private String categoria;
 	private String imagemUrl;
+	private double mediaAvaliacao;
 
 	public Produto() {
 	}
@@ -20,7 +21,7 @@ public class Produto {
 		this.imagemUrl = imagemUrl;
 	}
 
-	// Getters e Setters
+	// Getters e setters
 	public int getId() {
 		return id;
 	}
@@ -67,5 +68,13 @@ public class Produto {
 
 	public void setImagemUrl(String imagemUrl) {
 		this.imagemUrl = imagemUrl;
+	}
+
+	public double getMediaAvaliacao() {
+		return mediaAvaliacao;
+	}
+
+	public void setMediaAvaliacao(double mediaAvaliacao) {
+		this.mediaAvaliacao = mediaAvaliacao;
 	}
 }

@@ -11,21 +11,7 @@ public class Pedido {
 	private String status;
 	private Timestamp dataPedido;
 
-	public Pedido() {
-	}
-
-	public Pedido(int id, String clienteNome, String telefone, String endereco, String itens, String status,
-			Timestamp dataPedido) {
-		this.id = id;
-		this.clienteNome = clienteNome;
-		this.telefone = telefone;
-		this.endereco = endereco;
-		this.itens = itens;
-		this.status = status;
-		this.dataPedido = dataPedido;
-	}
-
-	// Getters e Setters
+	// getters/setters
 	public int getId() {
 		return id;
 	}
